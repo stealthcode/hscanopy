@@ -1,19 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Canopy (
-      url
+    url
     , find
+    , start
 ) where
 
-import Data.Text (Text, splitOn, append, toUpper, toLower)
-import Test.WebDriver 
+import Data.Text (Text, splitOn, append, toUpper, toLower, unpack)
+import Test.WebDriver
+import Test.WebDriver.Classes
 
-capabilities = defaultCaps { browser = firefox }
+start b = runSession defaultSession defaultCaps { browser = b }
 
-run = runSession defaultSession capabilities $ do 
-    url "http://stackoverflow.com" 
-    e1 <- find "#nav-questions"
-    click e1
-
-url = openPage
+url :: WebDriver wd => Text -> wd ()
+url u = openPage $ unpack u
 
 find selector = findElem $ ByCSS selector
